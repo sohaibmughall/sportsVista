@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "319624225408",
+    "project_id": "sportsvista-19664",
+    "storage_bucket": "sportsvista-19664.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319624225408:android:7c58ca055c8143e807fc65",
+        "android_client_info": {
+          "package_name": "com.sportsvista"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319624225408-7htgm1g049thu3lr42plth5v7v7sas53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHuY1iPteD0kNmAmw9wsXCiQOpkDG7w9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319624225408-7htgm1g049thu3lr42plth5v7v7sas53.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319624225408:android:f7250adb1a5fefbe07fc65",
+        "android_client_info": {
+          "package_name": "com.sportsvistaproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319624225408-22rmk3v0i7fppu6tt6n6p9qmbjqq05o7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sportsvistaproject",
+            "certificate_hash": "18d252ea00f5d4e9d3dd90ffbf7f7f1bc68cd8b4"
+          }
+        },
+        {
+          "client_id": "319624225408-7htgm1g049thu3lr42plth5v7v7sas53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHuY1iPteD0kNmAmw9wsXCiQOpkDG7w9Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319624225408-7htgm1g049thu3lr42plth5v7v7sas53.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
