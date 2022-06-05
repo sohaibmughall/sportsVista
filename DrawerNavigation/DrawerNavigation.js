@@ -9,6 +9,7 @@ import Booking from "../Screens/Dashboard/Booking";
 import Home from "./../Screens/Dashboard/Home";
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/Ionicons';
+import MyBooking from "../Screens/Dashboard/myBooking";
 
 const Drawer = createDrawerNavigator();
 const DrawerScreen = (props) => {
@@ -59,6 +60,11 @@ const DrawerScreen = (props) => {
             name="Acdemy Detail Screen"
             component={AcdemyDetailScreen}
           />
+          <Drawer.Screen
+            name="myBooking"
+            component={MyBooking}
+          />
+
         </Drawer.Group>
       </Drawer.Navigator>
     </>

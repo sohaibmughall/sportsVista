@@ -72,6 +72,19 @@ const DrawerMenuDetail = (props) => {
             /> */}
             <Text style={styles.drawerTextStyle}>Booking screen</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate("myBooking");
+            }}
+            style={styles.drawerTabContainer}
+          >
+            {/* <MaterialCommunityIcons
+              name="desktop-mac-dashboard"
+              size={18}
+              color="#fff"
+            /> */}
+            <Text style={styles.drawerTextStyle}>My Bookings</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.logoutContainer}>
