@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat'
 
 import { firebase } from "../../src/firebase/config";
@@ -6,7 +6,7 @@ import { getAuth } from "firebase/auth";
 
 const auth = getAuth();
 
-const Chat = () => {
+const MyChat = () => {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
@@ -41,18 +41,18 @@ const Chat = () => {
         });
     }, []);
     return (
-        <div>
-            <GiftedChat
-                messages={messages}
-                showAvatarForEveryMessage={true}
-                onSend={messages => onSend(messages)}
-                user={{
-                    _id: auth?.currentUser?.email,
-                    avatar: 'https://i.pravatar.cc/300'
-                }}
-            />
-        </div>
+
+        <GiftedChat
+            messages={messages}
+            showAvatarForEveryMessage={true}
+            onSend={messages => onSend(messages)}
+            user={{
+                _id: auth?.currentUser?.email,
+                avatar: 'https://i.pravatar.cc/300'
+            }}
+        />
+
     );
 }
 
-export default Chat;
+export default MyChat;

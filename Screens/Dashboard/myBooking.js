@@ -16,7 +16,7 @@ const auth = getAuth();
 const user = auth.currentUser;
 
 
-const myBooking = () => {
+const myBooking = (props) => {
 
     const [myBooking, setmyBooking] = useState([]);
 
@@ -51,7 +51,7 @@ const myBooking = () => {
                                 return (
                                     <View style={styles.card}>
 
-                                        <Card >
+                                        <Card onPress={() => props.navigation.navigate("MyChats")}>
                                             <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
                                             <Card.Content>
                                                 <Title>Card title</Title>
