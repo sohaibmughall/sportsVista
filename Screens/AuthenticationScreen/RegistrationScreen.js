@@ -23,7 +23,8 @@ const RegistrationScreen = props => {
   const [loaderLoading, setLoaderLoading] = useState(false);
   const navigation = useNavigation()
 
-  const handleSubmit = async registrationDetails => {
+
+  const _handleSubmit = async registrationDetails => {
     try {
       setLoaderLoading(true);
 
@@ -45,9 +46,10 @@ const RegistrationScreen = props => {
       // Storing user information on the firestore collection named Users
       const usersRef = firebase.firestore().collection("Users");
       await usersRef.doc(uid).set(data);
-
+      await addTeam(registrationDetails.teamName,uid)
+      setLoaderLoading(false)
       // Navigate to Home Screen
-      // navigation.navigate("Home Screen")
+      navigation.navigate("Drawer Screen")
       setLoaderLoading(false);
     } catch (error) {
       if (error.code === "auth/email-already-in-use") {
@@ -67,6 +69,27 @@ const RegistrationScreen = props => {
       setLoaderLoading(false);
     }
   };
+  // add team ------------------------------------
+  const addTeam= async(TeamName,uid)=>{
+    let team= {
+     uid,
+     Availability:true,
+     Loss:0,
+     Rank:0,
+     Wins:0,
+     TeamName
+    }
+   try {
+    const usersRef = firebase.firestore().collection("Teams").doc("24Lsqb7Bizv7BwNh1Oh1")
+    .collection('Cricket')
+     let res= await usersRef.add(team) 
+              await  usersRef.doc(res.id).update({id:res.id})
+              return true
+   } catch (error) {
+     console.log(error) 
+     return error
+   }
+  }
 
   const validationSchema = Yup.object({
     firstName: Yup.string()
@@ -122,7 +145,7 @@ const RegistrationScreen = props => {
             password: "",
             isMobile: true
           }}
-          onSubmit={handleSubmit}
+          onSubmit={_handleSubmit}
           validationSchema={validationSchema}
         >
           {({
@@ -181,6 +204,17 @@ const RegistrationScreen = props => {
                     touched={touched.phoneNo}
                     errors={errors.phoneNo}
                   />
+                   <Input
+                    title="Address"
+                    placeholder="**********"
+                    value={values.address}
+                    onChangeText={handleChange("address")}
+                    onBlur={() => setFieldTouched("address")}
+                  />
+                  <FormInputError
+                    touched={touched.address}
+                    errors={errors.address}
+                  />
                   <Input
                     title="Team name"
                     placeholder="**********"
@@ -189,8 +223,8 @@ const RegistrationScreen = props => {
                     onBlur={() => setFieldTouched("teamName")}
                   />
                   <FormInputError
-                    touched={touched.address}
-                    errors={errors.address}
+                    touched={touched.teamName}
+                    errors={errors.teamName}
                   />
                   <Input
                     title="Password"
@@ -215,7 +249,7 @@ const RegistrationScreen = props => {
                   externalButtonContainerStyle={styles.buttonStyle}
                   loader={loaderLoading}
                   onPress={handleSubmit}
-                  disabled={!isValid}
+                  // disabled={!isValid}
                 />
               </View>
             </KeyboardAvoidingView>}
