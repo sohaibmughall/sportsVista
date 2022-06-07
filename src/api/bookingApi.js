@@ -67,12 +67,11 @@ import { v4 as uuidv4 } from "uuid";
 
 //   bookingsRetreived(bookingList);
 // }
-
 export const addBooking = (booking, addComplete) => {
-  console.log(booking);
-  firebase
+  // console.log(booking);
+ return firebase
     .firestore()
-    .collection("Matches")
+    .collection("Bookings")
     .add({
       Confirmation: "Pending",
       Sport: booking.selectedSport,
@@ -88,6 +87,29 @@ export const addBooking = (booking, addComplete) => {
     //   booking.id = snapshot.id;
     //   snapshot.set(booking);
     // })
-    .then(() => addComplete(booking))
-    .catch((error) => console.log(error));
+    // .then(() => addComplete(booking))
+    // .catch((error) => console.log(error));
 };
+// export const addBooking = (booking, addComplete) => {
+//   console.log(booking);
+//  return firebase
+//     .firestore()
+//     .collection("Matches")
+//     .add({
+//       Confirmation: "Pending",
+//       Sport: booking.selectedSport,
+//       Date: booking.date,
+//       Match_Against: booking.selectedTeam,
+//       Match_Against_uuid: booking.uuid2,
+//       Match_creater: booking.myteam,
+//       Match_creater_uuid: booking.uuid,
+//       Venue: booking.selectedVenue,
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+//     })
+//     // .then((snapshot) => {
+//     //   booking.id = snapshot.id;
+//     //   snapshot.set(booking);
+//     // })
+//     // .then(() => addComplete(booking))
+//     // .catch((error) => console.log(error));
+// };
