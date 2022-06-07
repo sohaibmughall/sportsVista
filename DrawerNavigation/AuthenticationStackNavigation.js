@@ -19,7 +19,7 @@ const AuthenticationStackNavigation = () => {
       >
         <Stack.Screen name="Welcome Screen" component={WelcomeScreen} />
         <Stack.Screen name="Login Screen" component={LogInScreen} />
-        <Stack.Screen name="Registration Screen" component={RegistrationScreen} />     
+        <Stack.Screen name="Registration Screen" component={RegistrationScreen} />
         <Stack.Screen name="Drawer Screen" component={DrawerScreen} />
       </Stack.Group>
     </Stack.Navigator>

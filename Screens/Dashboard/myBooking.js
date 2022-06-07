@@ -10,7 +10,9 @@ import React, { useState, useEffect } from "react";
 import { windowWidth } from "../../src/utils/index";
 import { firebase } from '../../src/firebase/config'
 import { getAuth } from "firebase/auth";
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
+import moment from "moment";
+import { Button } from 'react-native-elements'
 
 const auth = getAuth();
 const user = auth.currentUser;
@@ -24,21 +26,21 @@ const myBooking = (props) => {
 
         let bookingitem = []
 
-        var snapshot = await firebase.firestore()
-            .collection('Bookings')
+        const snapshot = await firebase.firestore()
+            .collection('Matches')
             .get()
 
         snapshot.forEach((doc) => {
             const bookingItem = doc.data();
             bookingitem.push(bookingItem);
-            const data = bookingitem.filter(item => item.uuid ? item.uuid == user.uid : null)
+            const data = bookingitem.filter(item => item.Match_creater_uuid.uid == user.uid)
             setmyBooking(data)
         });
     }, []);
 
 
     const image = require("../../assets/backgroundone.jpg");
-    const LeftContent = props => <Avatar.Icon {...props} icon="bookmark" />
+    const LeftContent = props => <Avatar.Icon {...props} icon="message" />
     return (
         <View style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
@@ -46,20 +48,25 @@ const myBooking = (props) => {
                 <ScrollView>
                     <View >
                         <View style={styles.cardContainer}>
-                            {myBooking.map(item => {
+                            {myBooking.length ? myBooking.map(item => {
+                                const date = moment(item.Data).format('MMMM Do YYYY, h:mm:ss a');
                                 return (
                                     <View style={styles.card}>
 
-                                        <Card>
-                                            <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
+                                        <Card >
+                                            <Card.Title title={item.Match_creater + " / " + item.Match_Against} subtitle={date} />
+                                            <View style={styles.conf}>
+                                                <Text style={item.Confirmation == "Pending" ? { backgroundColor: "red", padding: 5, color: "white" } : { backgroundColor: "green", padding: 5, color: "white" }}> {item.Confirmation}</Text>
+                                            </View>
                                             <Card.Content>
-                                                <Title>Card title</Title>
-                                                <Paragraph>Card content</Paragraph>
+                                                <Title style={{ textTransform: "capitalize" }}>{"Destination" + " : " + item.Venue} </Title>
+                                                <Paragraph>{"Sport" + " : " + item.Sport}</Paragraph>
+                                                <Button onPress={() => props.navigation.navigate("Booking")} title={"Start Chat"} />
                                             </Card.Content>
                                         </Card>
                                     </View>
                                 )
-                            })}
+                            }) : <Text> YOU Have No booking yet </Text>}
                         </View>
                     </View>
                 </ScrollView>
@@ -74,6 +81,9 @@ export default myBooking;
 const styles = StyleSheet.create({
     cardContainer: {
         padding: 20
+    },
+    conf: {
+        alignItems: "flex-end"
     },
     card: {
         paddingBottom: 10

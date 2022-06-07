@@ -173,9 +173,9 @@ const AcdemyScreen = (props) => {
       } else {
         setNoValueFond("No Acdemy Found");
       }
-    } catch (error) {}
+    } catch (error) { }
   };
-  console.log("set-search" ,search)
+  console.log("set-search", search)
   return (
     <>
       <View style={styles.screen}>
