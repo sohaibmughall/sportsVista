@@ -7,7 +7,7 @@ import {
     ScrollView,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { windowWidth } from "./../../src/utils/index";
+import { windowWidth } from "../../src/utils/index";
 import { firebase } from '../../src/firebase/config'
 import { getAuth } from "firebase/auth";
 import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
@@ -42,7 +42,6 @@ const myBooking = (props) => {
     return (
         <View style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                {/* <Notification /> */}
                 <Text style={styles.heading}>My Bookings</Text>
                 <ScrollView>
                     <View >
@@ -51,7 +50,7 @@ const myBooking = (props) => {
                                 return (
                                     <View style={styles.card}>
 
-                                        <Card onPress={() => props.navigation.navigate("MyChats")}>
+                                        <Card>
                                             <Card.Title title="Card Title" subtitle="Card Subtitle" left={LeftContent} />
                                             <Card.Content>
                                                 <Title>Card title</Title>
