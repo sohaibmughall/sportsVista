@@ -1,65 +1,65 @@
-import { View, Text, Image, StyleSheet,ImageBackground, Alert } from "react-native";
-import React,{useEffect, useState} from "react";
+import { View, Text, Image, StyleSheet, ImageBackground, Alert } from "react-native";
+import React, { useEffect, useState } from "react";
 import SportsBtn from "../../components/Sportbtn";
-import { windowWidth,windowHeight } from '../../src/utils';
+import { windowWidth, windowHeight } from '../../src/utils';
 import * as Notifications from 'expo-notifications'
-import {updateSpecificUser,getSpecificUserById} from '../../src/api/usersApi'
+import { updateSpecificUser, getSpecificUserById } from '../../src/api/usersApi'
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
 const auth = getAuth();
 const user = auth.currentUser;
 const Home = () => {
   const image = require("../../assets/backgroundone.jpg");
- let focused= useIsFocused()
+  let focused = useIsFocused()
   // states-------------------------------------------------------
-  const [userData,setUserData]=useState(null)
-  useEffect(()=>{
+  const [userData, setUserData] = useState(null)
+  useEffect(() => {
     registerForPushNotificationsAsync()
-  },[userData])
-  useEffect(()=>{
+  }, [userData])
+  useEffect(() => {
     setLoginUserData()
-  },[focused])
+  }, [focused])
   // set login user data in to state-------------------------------
- const setLoginUserData=async()=>{
-if(user&&user.uid){
-  try {
-    let res=await  getSpecificUserById(user.uid)
-     res?setUserData({...res})
-     :Alert.alert("ERROR","SOMETHING WENT WRONG")
-    return true
-  } catch (error) {
-     Alert.alert("ERROR","SOMETHING WENT WRONG")
-     return false
-  }
-}
+  const setLoginUserData = async () => {
+    if (user && user.uid) {
+      try {
+        let res = await getSpecificUserById(user.uid)
+        res ? setUserData({ ...res })
+          : Alert.alert("ERROR", "SOMETHING WENT WRONG")
+        return true
+      } catch (error) {
+        Alert.alert("ERROR", "SOMETHING WENT WRONG")
+        return false
+      }
+    }
   }
   // registration fro push notification ---------------------------
   async function registerForPushNotificationsAsync() {
     if (user && user.uid) {
-   try {
-    let push_token
-    const res = await Notifications.getPermissionsAsync()
-    // console.log(res)
-    const { status: existingStatus } = res
-    // console.log(existingStatus)
-    let finalStatus = existingStatus
-    if (existingStatus !== 'granted') {
-      const { status } = await Notifications.requestPermissionsAsync()
-      finalStatus = status
-    }
-    if (finalStatus !== 'granted') {
-      alert('Failed to get push token for push notification!')
-      return
-    }
-    push_token = (await Notifications.getExpoPushTokenAsync()).data
-    // console.log(push_token)
-    if (!userData||!userData.notification_token ||userData.notification_token != push_token) {
-    await  updateSpecificUser(user.uid,{notification_token:push_token})
-    }
-    return push_token
-   } catch (error) {
-     return error
-   }
+      try {
+        let push_token
+        const res = await Notifications.getPermissionsAsync()
+        // console.log(res)
+        const { status: existingStatus } = res
+        // console.log(existingStatus)
+        let finalStatus = existingStatus
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync()
+          finalStatus = status
+        }
+        if (finalStatus !== 'granted') {
+          alert('Failed to get push token for push notification!')
+          return
+        }
+        push_token = (await Notifications.getExpoPushTokenAsync()).data
+        // console.log(push_token)
+        if (!userData || !userData.notification_token || userData.notification_token != push_token) {
+          await updateSpecificUser(user.uid, { notification_token: push_token })
+        }
+        return push_token
+      } catch (error) {
+        return error
+      }
     }
   }
   // end---------------------
@@ -72,14 +72,14 @@ if(user&&user.uid){
             source={require("../../assets/logo2.png")}
           />
         </View>
-        <View style={styles.btnContainer}>
-        <View style={{ position:"absolute",top:-30,width:windowWidth/2,left:windowWidth/4 - 7,backgroundColor:"red"}}>
+        <View style={{ width: windowWidth / 2, left: windowWidth / 4 - 7, backgroundColor: "red" }}>
           <Text
-            style={{ fontSize: 26, fontWeight: "bold", textAlign: "center",color:"white" }}
+            style={{ fontSize: 26, fontWeight: "bold", textAlign: "center", color: "white" }}
           >
             Game on hai!
           </Text>
         </View>
+        <View style={styles.btnContainer}>
           <SportsBtn
             ImgSource={require("../../assets/cricket.png")}
             sportsName="Cricket"
@@ -102,7 +102,7 @@ if(user&&user.uid){
             ImgSource={require("../../assets/vs.png")}
             sportsName="Find Match!"
           />
-          </View>
+        </View>
       </ImageBackground>
     </View>
   );
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     paddingVertical: 25,
     paddingHorizontal: 4,
-    justifyContent: "space-around",
-    backgroundColor: "rgba(0,0,0,0.9)",
+    justifyContent: "space-between",
+    // backgroundColor: "rgba(0,0,0,0.9)",
     borderRadius: 10,
   },
   logo: {
