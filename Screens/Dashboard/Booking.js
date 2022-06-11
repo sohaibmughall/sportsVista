@@ -13,7 +13,7 @@ import { Sports } from "../../assets/data/SportCategories";
 import { getVenues } from "../../src/api/venueApi";
 import { getBasketballTeams } from "../../src/api/teamsApi";
 import { addBooking, getBookings } from "../../src/api/bookingApi";
-import {  getSpecificUserById } from "../../src/api/usersApi";
+import { getSpecificUserById } from "../../src/api/usersApi";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getFootballTeams, getCricketTeams } from "./../../src/api/teamsApi";
 import * as Notifications from 'expo-notifications';
@@ -66,24 +66,24 @@ const Booking = () => {
     if (
       teamList
     ) {
- try {
-  setLoader(true)
-  const team = teamList.filter(item => item.TeamName == selectedTeam)
-  const getMyTeam = teamList.filter(item => item.uid == user.uid)
-  const myteam = getMyTeam[0].TeamName
-  const uuid = getMyTeam[0]
-  const uuid2 = team[0]
-  let vs = { selectedSport, selectedTeam, selectedVenue, date, uuid, myteam, uuid2 };
-  // console.log(vs);
- let res= await addBooking(vs);
- let notification_res =await sendNotificationToTeam(uuid2,selectedVenue,date,myteam)
- handleBookingResponse(vs)
- setLoader(false)
- } catch (error) {
-   console.log( "error------", error)
-   setLoader(false)
- }
- 
+      try {
+        setLoader(true)
+        const team = teamList.filter(item => item.TeamName == selectedTeam)
+        const getMyTeam = teamList.filter(item => item.uid == user.uid)
+        const myteam = getMyTeam[0].TeamName
+        const uuid = getMyTeam[0]
+        const uuid2 = team[0]
+        let vs = { selectedSport, selectedTeam, selectedVenue, date, uuid, myteam, uuid2 };
+        // console.log(vs);
+        let res = await addBooking(vs);
+        let notification_res = await sendNotificationToTeam(uuid2, selectedVenue, date, myteam)
+        handleBookingResponse(vs)
+        setLoader(false)
+      } catch (error) {
+        console.log("error------", error)
+        setLoader(false)
+      }
+
     }
     // setLoader(true);
 
@@ -134,37 +134,37 @@ const Booking = () => {
   //   setBookingList(bookingList);
   // };
 
-  const sendNotificationToTeam= async (s_t_obj,venue,date,name)=>{
-    let {TeamName,uid,id,}= s_t_obj
-        try {
-          let user_res=await getSpecificUserById(s_t_obj.uid)
-          const message = {
-            to: user_res.notification_token,
-            sound: 'default',
-            title: 'Match Request',
-            body: `${name} is requesting for match at ${venue} from ${date.toDateString()}`,
-            data: { someData: 'goes here' },
-          };
-        
-       let res=   await fetch('https://exp.host/--/api/v2/push/send', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Accept-encoding': 'gzip, deflate',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(message),
-          });
-          setLoader(false)
-          return (res)
+  const sendNotificationToTeam = async (s_t_obj, venue, date, name) => {
+    let { TeamName, uid, id, } = s_t_obj
+    try {
+      let user_res = await getSpecificUserById(s_t_obj.uid)
+      const message = {
+        to: user_res.notification_token,
+        sound: 'default',
+        title: 'Match Request',
+        body: `${name} is requesting for match at ${venue} from ${date.toDateString()}`,
+        data: { someData: 'goes here' },
+      };
 
-        } catch (error) {
-          setLoader(false)
-          return error
-        }
+      let res = await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Accept-encoding': 'gzip, deflate',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+      });
+      setLoader(false)
+      return (res)
+
+    } catch (error) {
+      setLoader(false)
+      return error
+    }
   }
   useEffect(() => {
-   
+
     if (selectedSport == "Football") {
       // console.log("called thissss");
       getFootballTeams(onTeamsReceived);
@@ -250,8 +250,8 @@ const Booking = () => {
             containerStyle={{ marginVertical: 10 }}
           /> */}
           <View>
-            <Button  
-              title={loader?"Sending Request":"Request Booking"}
+            <Button
+              title={loader ? "Sending Request" : "Request Booking"}
               color={"#B7081B"}
               type="submit"
               disabled={loader}

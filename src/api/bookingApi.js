@@ -68,23 +68,21 @@ import { v4 as uuidv4 } from "uuid";
 //   bookingsRetreived(bookingList);
 // }
 
-export const getBookings = async onBookingRetrive => {
+export async function getBookings(onBookingRetrive) {
   let bookingitem = []
-  try {
-    const snapshot = await firebase.firestore()
-      .collection('Matches')
-      .get()
 
-    snapshot.forEach((doc) => {
-      const bookingItem = doc.data();
-      bookingitem.push(bookingItem);
+  const snapshot = await firebase.firestore()
+    .collection('Matches')
+    .get()
 
-    });
+  snapshot.forEach((doc) => {
+    const bookingItem = doc.data();
+    bookingitem.push(bookingItem);
 
-    onBookingRetrive(bookingitem);
-  } catch (err) {
-    console.log(err);
-  }
+  });
+
+  onBookingRetrive(bookingitem);
+
 };
 
 
