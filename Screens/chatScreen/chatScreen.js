@@ -5,8 +5,9 @@ import {
     StyleSheet,
     Alert,
     ScrollView,
+    KeyboardAvoidingView,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { windowWidth } from "../../src/utils/index";
 import { firebase } from '../../src/firebase/config'
 import { getAuth } from "firebase/auth";
@@ -19,11 +20,14 @@ import { getBookings } from "../../src/api/bookingApi";
 
 const ChatScreen = (props) => {
     console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
+    const scrollRef = useRef(<ScrollView />);
     const [message, setmessage] = useState("");
 
     const auth = getAuth();
     const user = auth.currentUser;
     const [chats, setchats] = useState([]);
+    const { Match_Against } = props?.route?.params?.route;
+
 
     const obj = {
         content: message,
@@ -31,29 +35,41 @@ const ChatScreen = (props) => {
         uid: user.uid
     }
 
-    console.log(chats);
-    const image = require("../../assets/backgroundone.jpg");
+    const handleSend = () => {
+        setchats((oldArray) => oldArray.concat(obj))
+        setmessage("")
+        scrollRef.current?.scrollTo({
+            y: 10000,
+            animated: true
+        });
+
+    }
+
     return (
         <View style={styles.container}>
-            <ImageBackground  resizeMode="cover" style={styles.image}>
-                <Text style={styles.heading}>Start Chat</Text>
-                <ScrollView>
-                    <View style={styles.chatcontainer}>
-                        <View>
-                            {chats.map(chat => {
-                                return (
-                                    <View style={styles.chatmessageLeft}>
-                                        <Text key={chat.timestamp} style={{ textAlign: "left", color: "white", marginBottom: 10 }}>{chat.content}</Text>
-                                        <Text key={chat.timestamp} style={{ textAlign: "right", color: "white" }}>{chat.timestamp}</Text>
-                                    </View>
-                                )
-                            })}
+            <ImageBackground resizeMode="cover" style={styles.image}>
+                <Text style={styles.heading}>{Match_Against}</Text>
+                <ScrollView ref={scrollRef}>
+                    <KeyboardAvoidingView>
+                        <View style={styles.chatcontainer}>
+
+                            <View>
+                                {chats.map(chat => {
+                                    return (
+                                        <View style={styles.chatmessageLeft}>
+                                            <Text key={chat.content} style={{ textAlign: "left", color: "white", marginBottom: 10 }}>{chat.content}</Text>
+                                            <Text key={chat.timestamp} style={{ textAlign: "right", color: "white" }}>{chat.timestamp}</Text>
+                                        </View>
+                                    )
+                                })}
+                            </View>
                         </View>
-                    </View>
+                    </KeyboardAvoidingView>
                 </ScrollView>
-                <View >
-                    <Input value={message} onChangeText={(e) => setmessage(e)} />
-                    <Button title={"send"} onPress={() => setchats((oldArray) => oldArray.concat(obj))} />
+                <View style={styles.inputarea}>
+                    <Input value={message} onChangeText={(e) => setmessage(e)} placeholder="Type Message"
+                        leftIcon={{ type: 'font-awesome', name: 'comment' }} />
+                    <Button title={"send"} onPress={() => handleSend()} />
                 </View>
 
             </ImageBackground>
@@ -66,6 +82,12 @@ export default ChatScreen;
 const styles = StyleSheet.create({
     cardContainer: {
         padding: 20
+    },
+    inputarea: {
+        padding: 10,
+        display: "flex",
+        flexDirection: "row",
+        width: "85%"
     },
     conf: {
         alignItems: "flex-end"
@@ -81,7 +103,7 @@ const styles = StyleSheet.create({
 
     chatcontainer: {
         padding: 20,
-        backgroundColor: "white",
+        backgroundColor: "transparent",
 
     },
     card: {
@@ -104,6 +126,9 @@ const styles = StyleSheet.create({
         fontSize: 28,
         fontWeight: "bold",
         textAlign: "center",
+        borderBottomColor: "black",
+        borderBottomWidth: 2,
+        paddingBottom: 10
     },
     inputFields: {
         width: windowWidth / 1.2,

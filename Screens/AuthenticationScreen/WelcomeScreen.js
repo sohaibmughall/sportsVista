@@ -6,9 +6,19 @@ import Colors from "../../constant/Colors";
 import Button from "../../components/Forms/Button";
 
 import { useNavigation } from "@react-navigation/native";
+import { getAuth } from "firebase/auth";
 
 const WelcomeScreen = (props) => {
+
   const [activeIndex, setActiveIndex] = useState(0);
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  if (user) {
+    props.navigation.navigate("Drawer Screen")
+  } else {
+    props.navigation.navigate("Welcome Screen")
+  }
   const [item, setItem] = useState([
     {
       image: require("../../assets/Images/sportsVista.jpeg"),
@@ -30,8 +40,9 @@ const WelcomeScreen = (props) => {
         "where  team meets team Sports vista is app where we promote our local teams to showcase their talents ",
     },
   ]);
-  
+
   const renderItem = ({ item, index }) => {
+
     return (
       <View style={styles.slideContainer}>
         <View>

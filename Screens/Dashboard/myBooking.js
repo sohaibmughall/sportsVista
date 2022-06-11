@@ -20,6 +20,7 @@ const user = auth.currentUser;
 
 
 const myBooking = (props) => {
+    console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
 
     const [myBooking, setmyBooking] = useState([]);
 
@@ -50,12 +51,14 @@ const myBooking = (props) => {
                                         <Card >
                                             <Card.Title title={item.Match_creater + " / " + item.Match_Against} subtitle={date} />
                                             <View style={styles.conf}>
-                                                <Text style={item.Confirmation == "Pending" ? { backgroundColor: "red", padding: 5, color: "white" } : { backgroundColor: "green", padding: 5, color: "white" }}> {item.Confirmation}</Text>
+                                                <Text style={item.Confirmation == "Pending" ? { backgroundColor: "red", padding: 5, color: "white" } : item.Confirmation == "Rejected" ? { backgroundColor: "yellow", padding: 5, color: "black" } : item.Confirmation == "Accepted" ? { backgroundColor: "green", padding: 5, color: "white" } : null}> {item.Confirmation}</Text>
                                             </View>
                                             <Card.Content>
                                                 <Title style={{ textTransform: "capitalize" }}>{"Destination" + " : " + item.Venue} </Title>
                                                 <Paragraph>{"Sport" + " : " + item.Sport}</Paragraph>
-                                                <Button onPress={() => props.navigation.navigate("myChats")} title={"Start Chat"} />
+                                                <Button onPress={() => props.navigation.navigate("myChats", {
+                                                    route: item,
+                                                })} title={"Start Chat"} />
                                             </Card.Content>
                                         </Card>
                                     </View>
