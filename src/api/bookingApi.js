@@ -71,7 +71,7 @@ export const addBooking = (booking, addComplete) => {
   // console.log(booking);
  return firebase
     .firestore()
-    .collection("Bookings")
+    .collection("Matches")
     .add({
       Confirmation: "Pending",
       Sport: booking.selectedSport,

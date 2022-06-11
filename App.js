@@ -1,13 +1,13 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { StyleSheet, Text, View } from "react-native";
 import AppLoading from "expo-app-loading"; // expo install expo-app-loading
 import { useFonts } from "expo-font";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthenticationStackNavigation from "./DrawerNavigation/AuthenticationStackNavigation";
-
-
-
+import {navigationRef} from './DrawerNavigation/rootNavigationRef'
 export default function App() {
+ 
+
   let [fontsLoaded] = useFonts({
     "montserrat-light": require("./assets/fonts/Montserrat-Light.ttf"),
     "montserrat-regular": require("./assets/fonts/Montserrat-Regular.ttf"),
@@ -21,7 +21,7 @@ export default function App() {
   } else {
     return (
       <>
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
           <AuthenticationStackNavigation />
         </NavigationContainer>
       </>
