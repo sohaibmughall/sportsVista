@@ -17,15 +17,19 @@ import { getSpecificUserById } from "../../src/api/usersApi";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getFootballTeams, getCricketTeams } from "./../../src/api/teamsApi";
 import * as Notifications from 'expo-notifications';
-import Notification from '../../components/Notification/Notification'
+// import Notification from '../../components/Notification/Notification'
 import { getAuth } from "firebase/auth";
+import { firebase } from "../../src/firebase/config";
 import { ListItem } from "react-native-elements";
-
-const auth = getAuth();
-const user = auth.currentUser;
+import MatchNotificationComponent from '../../components/Notification/MatchNotification'
 
 
-const Booking = () => {
+
+
+const Booking = ({ route }) => {
+  const { params } = route ? route : {}
+  const { notification } = params ? params : {}
+  const [match_notification, set_match_notification] = useState(null);
   const [selectedSport, setSport] = useState(undefined);
   const [selectedVenue, setVenue] = useState(undefined);
   const [selectedTeam, setTeam] = useState(undefined);
@@ -39,8 +43,22 @@ const Booking = () => {
   const [show, setShow] = useState(false);
   const [bookingId, setBookingId] = useState(0);
   const [loader, setLoader] = useState(false);
+  const [user, setUser] = useState(null);
+  const [userDetail, setUserDetail] = useState(null);
+  const [modal, setModalShow] = useState(false);
 
+  useEffect(() => {
+    let auth = getAuth();
+    let _user = auth.currentUser;
+    setUser(_user)
+    // console.log("sssssssss--------------------",user)
 
+  }, [])
+  useEffect(() => {
+    console.log("notification--------------------", notification)
+    set_match_notification(notification)
+    setModalShow(notification ? true : false)
+  }, [params])
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
@@ -68,6 +86,7 @@ const Booking = () => {
     ) {
       try {
         setLoader(true)
+        // console.log("user--------------------",user)
         const team = teamList.filter(item => item.TeamName == selectedTeam)
         const getMyTeam = teamList.filter(item => item.uid == user.uid)
         const myteam = getMyTeam[0].TeamName
@@ -75,12 +94,14 @@ const Booking = () => {
         const uuid2 = team[0]
         let vs = { selectedSport, selectedTeam, selectedVenue, date, uuid, myteam, uuid2 };
         // console.log(vs);
-        let res = await addBooking(vs);
-        let notification_res = await sendNotificationToTeam(uuid2, selectedVenue, date, myteam)
-        handleBookingResponse(vs)
+        let snapshot = await addBooking(vs);
+        let match_id = snapshot.id
+        let res = await firebase.firestore().collection("Matches").doc(match_id).update({ match_id })
+        let notification_res = await sendNotificationToTeam(uuid2, selectedVenue, date, myteam, match_id)
+        handleBookingResponse(match_id)
         setLoader(false)
       } catch (error) {
-        console.log("error------", error)
+        Alert.alert("ERROR", "SOMETHING WENT WRONG ")
         setLoader(false)
       }
 
@@ -107,10 +128,10 @@ const Booking = () => {
     // });
   };
 
-  const handleBookingResponse = (booking) => {
+  const handleBookingResponse = (id) => {
     setLoader(false);
     Alert.alert(
-      `Booking made successfully\nbooking ID is\n ${booking.id}`
+      `Match request send successfully\n match id ID is\n ${id}`
     );
   };
   // const onBookingAdded = booking => {
@@ -134,16 +155,18 @@ const Booking = () => {
   //   setBookingList(bookingList);
   // };
 
-  const sendNotificationToTeam = async (s_t_obj, venue, date, name) => {
+  const sendNotificationToTeam = async (s_t_obj, venue, date, name, match_id) => {
     let { TeamName, uid, id, } = s_t_obj
     try {
       let user_res = await getSpecificUserById(s_t_obj.uid)
+      let sender_user_res = await getSpecificUserById(user.uid)
+      console.log("sender user------------", sender_user_res)
       const message = {
         to: user_res.notification_token,
         sound: 'default',
         title: 'Match Request',
         body: `${name} is requesting for match at ${venue} from ${date.toDateString()}`,
-        data: { someData: 'goes here' },
+        data: { match_id, notification_token: sender_user_res.notification_token },
       };
 
       let res = await fetch('https://exp.host/--/api/v2/push/send', {
@@ -194,6 +217,10 @@ const Booking = () => {
   const image = require("../../assets/backgroundone.jpg");
   return (
     <View style={styles.container}>
+      <MatchNotificationComponent
+        notification={match_notification}
+        isVisible={modal}
+        close={() => { setModalShow(false), set_match_notification(null) }} />
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         {/* <Notification /> */}
         <View>

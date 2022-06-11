@@ -6,19 +6,27 @@ import * as Notifications from 'expo-notifications'
 import { updateSpecificUser, getSpecificUserById } from '../../src/api/usersApi'
 import { getAuth } from "firebase/auth";
 import { useIsFocused } from "@react-navigation/native";
-const auth = getAuth();
-const user = auth.currentUser;
-const Home = () => {
+
+const Home = ({notification}) => {
   const image = require("../../assets/backgroundone.jpg");
   let focused = useIsFocused()
   // states-------------------------------------------------------
-  const [userData, setUserData] = useState(null)
-  useEffect(() => {
+  const [user,setUser]=useState(null)
+  const [userData,setUserData]=useState(null)
+  useEffect(()=>{
     registerForPushNotificationsAsync()
   }, [userData])
   useEffect(() => {
     setLoginUserData()
-  }, [focused])
+  },[user])
+  useEffect(()=>{
+    let auth = getAuth();
+  let _user = auth.currentUser;
+  setUser(_user)
+  },[])
+//   useEffect(()=>{
+// Alert.alert("Match Request","You have a match request accept or denied")
+//   },[notification,])
   // set login user data in to state-------------------------------
   const setLoginUserData = async () => {
     if (user && user.uid) {
