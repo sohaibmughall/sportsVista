@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DrawerMenuDetail from "./DrawerMenu";
@@ -9,9 +9,47 @@ import Booking from "../Screens/Dashboard/Booking";
 import Home from "./../Screens/Dashboard/Home";
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-vector-icons/Ionicons';
+import * as Notifications from 'expo-notifications'
+// import { useNavigation } from "@react-navigation/native";
+import navigation from './rootNavigationRef'
 
 const Drawer = createDrawerNavigator();
 const DrawerScreen = (props) => {
+  const {route,}=props
+  const {params}=route?route:{}
+  const {notification}=params?params:{}
+//  const  navigation=useNavigation()
+      // 2) using useLastNotificationResponse
+      let lastNotificationResponse = Notifications.useLastNotificationResponse()
+     // 1) using addNotificationResponseReceivedListener, which is triggered whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed
+     useEffect(() => {
+      const notificationInteractionSubscription = Notifications.addNotificationResponseReceivedListener(
+        response => {
+          // add the code to do what you need with the notification e.g. navigate to a specific screen
+          // handleNewNotification(response.notification, () =>
+          //   // navigation.navigate('NotificationList')
+            // alert("recived")
+          // )
+          lastNotificationResponse?.notification?.request?.content?.data?.match_id?
+          navigation.navigate("Booking",{notification:lastNotificationResponse?.notification?.request?.content}):null
+ 
+        }
+      )
+      // if (lastNotificationResponse) {
+      //   // add the code to do what you need with the notification e.g. navigate to a specific screen
+      //   // handleNewNotification(
+      //   //   lastNotificationResponse.notification.request.trigger.remoteMessage,
+      //   //   () => alert("last")
+      //   //   // navigation.navigate('Notifications')
+      //   // )
+      //       alert("done")
+      //       console.log(lastNotificationResponse?.notification?.request)
+
+      // }
+      return () => {
+        notificationInteractionSubscription.remove()
+      }
+    }, [lastNotificationResponse])
   const leftHeaderBack = () => {
     const navigation = useNavigation();
     return (
@@ -25,10 +63,12 @@ const DrawerScreen = (props) => {
       ></Icon.Button>
     );
   };
+  // const ReturnBooking=()=><Booking notification={notification} />
+  // const ReturnHome=()=><Home notification={notification}  />
   return (
     <>
       <Drawer.Navigator
-        initialRouteName="Home Screen"
+        initialRouteName={"Home Screen"}
         screenOptions={{
           headerTitle: "",
           drawerStyle: {
