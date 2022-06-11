@@ -10,6 +10,7 @@ import DrawerScreen from "./DrawerNavigation";
 const Stack = createStackNavigator();
 
 const AuthenticationStackNavigation = () => {
+  
   return (
     <Stack.Navigator initialRouteName="Welcome Screen">
       <Stack.Group

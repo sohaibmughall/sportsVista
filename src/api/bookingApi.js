@@ -67,9 +67,30 @@ import { v4 as uuidv4 } from "uuid";
 
 //   bookingsRetreived(bookingList);
 // }
+
+export const getBookings = async onBookingRetrive => {
+  let bookingitem = []
+  try {
+    const snapshot = await firebase.firestore()
+      .collection('Matches')
+      .get()
+
+    snapshot.forEach((doc) => {
+      const bookingItem = doc.data();
+      bookingitem.push(bookingItem);
+
+    });
+
+    onBookingRetrive(bookingitem);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
 export const addBooking = (booking, addComplete) => {
   // console.log(booking);
- return firebase
+  return firebase
     .firestore()
     .collection("Bookings")
     .add({
@@ -83,12 +104,12 @@ export const addBooking = (booking, addComplete) => {
       Venue: booking.selectedVenue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
     })
-    // .then((snapshot) => {
-    //   booking.id = snapshot.id;
-    //   snapshot.set(booking);
-    // })
-    // .then(() => addComplete(booking))
-    // .catch((error) => console.log(error));
+  // .then((snapshot) => {
+  //   booking.id = snapshot.id;
+  //   snapshot.set(booking);
+  // })
+  // .then(() => addComplete(booking))
+  // .catch((error) => console.log(error));
 };
 // export const addBooking = (booking, addComplete) => {
 //   console.log(booking);

@@ -16,6 +16,8 @@ export default function App() {
     "montserrat-bold": require("./assets/fonts/Montserrat-Bold.ttf"),
   });
 
+  console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
+
   if (!fontsLoaded) {
     return <AppLoading error={(error) => console.log("Error: ", error)} />;
   } else {

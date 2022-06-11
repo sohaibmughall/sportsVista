@@ -13,6 +13,7 @@ import { getAuth } from "firebase/auth";
 import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
 import moment from "moment";
 import { Button } from 'react-native-elements'
+import { getBookings } from "../../src/api/bookingApi";
 
 const auth = getAuth();
 const user = auth.currentUser;
@@ -22,25 +23,18 @@ const myBooking = (props) => {
 
     const [myBooking, setmyBooking] = useState([]);
 
-    useEffect(async () => {
 
-        let bookingitem = []
+    const onBookingRetrive = (bookings) => {
+        const data = bookings.filter(item => item.Match_creater_uuid.uid == user.uid)
+        setmyBooking(data);
+    };
 
-        const snapshot = await firebase.firestore()
-            .collection('Matches')
-            .get()
-
-        snapshot.forEach((doc) => {
-            const bookingItem = doc.data();
-            bookingitem.push(bookingItem);
-            const data = bookingitem.filter(item => item.Match_creater_uuid.uid == user.uid)
-            setmyBooking(data)
-        });
-    }, []);
+    useEffect(() => {
+        getBookings(onBookingRetrive)
+    }, [])
 
 
     const image = require("../../assets/backgroundone.jpg");
-    const LeftContent = props => <Avatar.Icon {...props} icon="message" />
     return (
         <View style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
@@ -61,7 +55,7 @@ const myBooking = (props) => {
                                             <Card.Content>
                                                 <Title style={{ textTransform: "capitalize" }}>{"Destination" + " : " + item.Venue} </Title>
                                                 <Paragraph>{"Sport" + " : " + item.Sport}</Paragraph>
-                                                <Button onPress={() => props.navigation.navigate("Booking")} title={"Start Chat"} />
+                                                <Button onPress={() => props.navigation.navigate("myChats")} title={"Start Chat"} />
                                             </Card.Content>
                                         </Card>
                                     </View>
