@@ -12,25 +12,23 @@ import { firebase } from '../../src/firebase/config'
 import { getAuth } from "firebase/auth";
 import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
 import moment from "moment";
-import { Button } from 'react-native-elements'
+import { Button, LinearProgress } from 'react-native-elements'
 import { getBookings } from "../../src/api/bookingApi";
 
-const auth = getAuth();
-const user = auth.currentUser;
 
 
 const myBooking = (props) => {
     console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
 
+    const auth = getAuth();
+    const user = auth.currentUser;
     const [myBooking, setmyBooking] = useState([]);
 
-
-    const onBookingRetrive = (bookings) => {
-        const data = bookings.filter(item => item.Match_creater_uuid.uid == user.uid)
-        setmyBooking(data);
-    };
-
     useEffect(() => {
+        const onBookingRetrive = (bookings) => {
+            const data = bookings.filter(item => item.Match_creater_uuid.uid == user.uid)
+            setmyBooking(data);
+        };
         getBookings(onBookingRetrive)
     }, [])
 
@@ -63,7 +61,7 @@ const myBooking = (props) => {
                                         </Card>
                                     </View>
                                 )
-                            }) : <Text> YOU Have No booking yet </Text>}
+                            }) : <Text> <LinearProgress color="primary"  variant="determinate" /> </Text>}
                         </View>
                     </View>
                 </ScrollView>

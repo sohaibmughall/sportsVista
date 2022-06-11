@@ -199,8 +199,9 @@ const Booking = ({ route }) => {
   }, [selectedSport]);
 
   const onTeamsReceived = (teamList) => {
+    let index = teamList.findIndex(item => item.uid === user.uid);
+    teamList.splice(index,1)
     setTeamList(teamList);
-    console.log(teamList[0]);
   };
   const onVenueReceived = (venueList) => {
     setVenueList(venueList);

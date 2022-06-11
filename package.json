@@ -21,6 +21,7 @@
     "expo-notifications": "^0.15.2",
     "expo-random": "~12.1.1",
     "expo-status-bar": "~1.2.0",
+    "expo-updates": "^0.13.2",
     "firebase": "^9.6.6",
     "formik": "^2.2.9",
     "moment": "^2.29.3",

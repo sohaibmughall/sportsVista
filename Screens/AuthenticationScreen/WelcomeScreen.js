@@ -14,11 +14,9 @@ const WelcomeScreen = (props) => {
   const auth = getAuth();
   const user = auth.currentUser;
 
-  if (user) {
-    props.navigation.navigate("Drawer Screen")
-  } else {
-    props.navigation.navigate("Welcome Screen")
-  }
+
+
+
   const [item, setItem] = useState([
     {
       image: require("../../assets/Images/sportsVista.jpeg"),
@@ -40,6 +38,14 @@ const WelcomeScreen = (props) => {
         "where  team meets team Sports vista is app where we promote our local teams to showcase their talents ",
     },
   ]);
+
+  // setTimeout(() => {
+  //   user.uid ?
+  //     props.navigation.navigate("Drawer Screen")
+  //     :
+  //     props.navigation.navigate("Welcome Screen")
+  // }, 200);
+
 
   const renderItem = ({ item, index }) => {
 
