@@ -25,7 +25,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "googleServicesFile": "./google-services.json",
-      "package": "com.sportsvista"
+      "package": "com.sportsvista",
+      "useNextNotificationsApi":true
     },
     "web": {
       "favicon": "./assets/favicon.png"
