@@ -1,4 +1,4 @@
-import {firebase} from '../firebase/config';
+import { firebase } from '../firebase/config';
 
 export const getFootballTeams = async teamsRetreived => {
   var teamList = [];
@@ -30,7 +30,7 @@ export const getBasketballTeams = async teamsRetreived => {
     console.log(err);
   }
 };
-export const getCricketTeams = async teamsRetreived => {
+export const getCricketTeams = async (teamsRetreived, teamsRetreived2) => {
   var teamList = [];
   try {
     var snapshot = await firebase.firestore().collection('Teams').doc('24Lsqb7Bizv7BwNh1Oh1').collection('Cricket').get();
@@ -41,6 +41,7 @@ export const getCricketTeams = async teamsRetreived => {
       teamList.push(teamItem);
     });
     teamsRetreived(teamList);
+    teamsRetreived2(teamList);
   } catch (err) {
     console.log(err);
   }
