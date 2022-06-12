@@ -1,9 +1,17 @@
-import React, {useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { Avatar } from "react-native-paper";
+import { getAuth } from "firebase/auth";
+import { Icon } from 'react-native-elements'
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
+
 
 const DrawerMenuDetail = (props) => {
+
+  const auth = getAuth()
+  const user = auth.currentUser
+  console.log(user.uid);
 
   return (
     <DrawerContentScrollView contentContainerStyle={styles.drawerContainer}>
@@ -16,7 +24,7 @@ const DrawerMenuDetail = (props) => {
             size={80}
           />
           <Text style={styles.profileTextStyle}>
-            {/* {lastName} {firstName} */}
+            {user.providerData[0].email}
           </Text>
         </View>
         <View>
@@ -26,11 +34,11 @@ const DrawerMenuDetail = (props) => {
             }}
             style={styles.drawerTabContainer}
           >
-            {/* <MaterialCommunityIcons
-              name="desktop-mac-dashboard"
-              size={18}
-              color="#fff"
-            /> */}
+            <MaterialCommunityIcons
+              name="map"
+              size={25}
+              color={"white"}
+            />
             <Text style={styles.drawerTextStyle}>Venue Screen</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -39,11 +47,11 @@ const DrawerMenuDetail = (props) => {
             }}
             style={styles.drawerTabContainer}
           >
-            {/* <MaterialCommunityIcons
-              name="desktop-mac-dashboard"
-              size={18}
-              color="#fff"
-            /> */}
+            <MaterialCommunityIcons
+              name="home-city"
+              size={24}
+              color={"white"}
+            />
             <Text style={styles.drawerTextStyle}>Academy Screen</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -52,11 +60,11 @@ const DrawerMenuDetail = (props) => {
             }}
             style={styles.drawerTabContainer}
           >
-            {/* <MaterialCommunityIcons
-              name="desktop-mac-dashboard"
-              size={18}
-              color="#fff"
-            /> */}
+            <MaterialCommunityIcons
+              name="home"
+              size={25}
+              color={"white"}
+            />
             <Text style={styles.drawerTextStyle}>Home Screen</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -65,11 +73,11 @@ const DrawerMenuDetail = (props) => {
             }}
             style={styles.drawerTabContainer}
           >
-            {/* <MaterialCommunityIcons
-              name="desktop-mac-dashboard"
-              size={18}
-              color="#fff"
-            /> */}
+            <MaterialCommunityIcons
+              name="arrow-up"
+              size={25}
+              color={"white"}
+            />
             <Text style={styles.drawerTextStyle}>Booking screen</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -78,22 +86,27 @@ const DrawerMenuDetail = (props) => {
             }}
             style={styles.drawerTabContainer}
           >
-            {/* <MaterialCommunityIcons
-              name="desktop-mac-dashboard"
-              size={18}
-              color="#fff"
-            /> */}
+            <MaterialCommunityIcons
+              name="arrow-down"
+              size={25}
+              color={"white"}
+            />
             <Text style={styles.drawerTextStyle}>My Bookings</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             onPress={() => {
               props.navigation.navigate("myChats");
             }}
             style={styles.drawerTabContainer}
           >
-            
+            <MaterialCommunityIcons
+              name="wechat"
+              size={25}
+              color={"white"}
+            />
+
             <Text style={styles.drawerTextStyle}>My Chats</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.logoutContainer}>
@@ -105,7 +118,7 @@ const DrawerMenuDetail = (props) => {
           <Text style={styles.logoutTextStyle}>Logout</Text>
         </TouchableOpacity>
       </View>
-      
+
     </DrawerContentScrollView>
   );
 };
@@ -148,7 +161,7 @@ const styles = StyleSheet.create({
   //Style
   profileTextStyle: {
     fontFamily: "montserrat-medium",
-    fontSize: 18,
+    fontSize: 15,
     paddingTop: 10,
     color: "#fff",
     paddingBottom: 10,
