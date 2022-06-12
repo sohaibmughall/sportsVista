@@ -25,8 +25,8 @@ const myBooking = (props) => {
     const [myBooking, setmyBooking] = useState([]);
 
     useEffect(() => {
-        const onBookingRetrive = (bookings) => {
-            const data = bookings.filter(item => item.Match_creater_uuid.uid == user.uid)
+        const onBookingRetrive = async (bookings) => {
+            const data = await bookings.filter(item => item.Match_creater_uuid.uid == user.uid)
             setmyBooking(data);
         };
         getBookings(onBookingRetrive)
@@ -61,7 +61,7 @@ const myBooking = (props) => {
                                         </Card>
                                     </View>
                                 )
-                            }) : <Text> <LinearProgress color="primary"  variant="determinate" /> </Text>}
+                            }) : <Text> <LinearProgress color="primary" variant="determinate" /> </Text>}
                         </View>
                     </View>
                 </ScrollView>

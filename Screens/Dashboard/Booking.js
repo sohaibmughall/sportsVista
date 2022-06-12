@@ -56,7 +56,7 @@ const Booking = ({ route }) => {
 
   }, [])
   useEffect(() => {
-    console.log("notification--------------------", notification)
+
     set_match_notification(notification)
     setModalShow(notification ? true : false)
   }, [params])

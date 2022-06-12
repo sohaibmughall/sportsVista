@@ -14,7 +14,7 @@ const VenueScreen = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       const onBackPress = () => {
-        props.navigation.navigate("Acdemy Screen");
+        props.navigation.navigate("Venue Screen");
         return true;
       };
       BackHandler.addEventListener("hardwareBackPress", onBackPress);
@@ -27,25 +27,36 @@ const VenueScreen = (props) => {
   const [item, setItem] = useState([]);
   const Venues = [
     {
+      name: "Bath island",
+      coordinates: { latitude: 24.833953083519397, longitude: 67.03343085842236 },
+    }, {
+      name: "Sports timeout",
+      coordinates: { latitude: 24.820073294651415, longitude: 67.04825749721357 },
+    },
+    {
       name: "Moin khan Academy",
-      coordinates: { latitude: 23.259933, longitude: 71.412613 },
+      coordinates: { latitude: 24.782489417359642, longitude: 67.08938523413416 },
     },
     {
-      name: "NBP Academy",
-      coordinates: { latitude: 20.259933, longitude: 72.412613 },
+      name: "Kokan ground ",
+      coordinates: { latitude: 24.87849721509179, longitude: 67.07347555488623 },
     },
     {
-      name: "vital five",
-      coordinates: { latitude: 25.259933, longitude: 73.412613 },
+      name: "Eidgah ground",
+      coordinates: { latitude: 24.911733149296875, longitude: 67.02990361070844 },
     },
     {
-      name: "PIA cricket Academy",
-      coordinates: { latitude: 26.259933, longitude: 77.412613  },
+      name: "asghar ali shah",
+      coordinates: { latitude: 24.93706154243435, longitude: 67.03139148372323 },
     },
     {
-      name: "National Cricket Academy",
-      coordinates: { latitude: 23.259933, longitude: 77.412613 },
+      name: "Phase 6 ",
+      coordinates: { latitude: 24.807681537690986, longitude: 67.06091045488468 },
     },
+    {
+      name: "Zulfiqar avenue",
+      coordinates: { latitude: 24.786884897195293, longitude: 67.0838018241985 },
+    }
   ];
   const handlerSearch = (e) => {
     try {
@@ -62,7 +73,7 @@ const VenueScreen = (props) => {
         setItem(arrayOfSearch);
       } else {
       }
-    } catch (error) {}
+    } catch (error) { }
   };
   return (
     <>
@@ -95,29 +106,29 @@ const VenueScreen = (props) => {
         <View
           style={{
             width: "90%",
-            height: 320,
+            height: 620,
             marginTop: -50,
             borderWidth: 2,
           }}
         >
           <MapView
             region={{
-              latitude: 23.279933,
-              longitude: 71.402613,
-              latitudeDelta: 0.009,
-              longitudeDelta: 0.009,
+              latitude: 24.782489417359642,
+              longitude: 67.08938523413416,
+
             }}
+            maxZoomLevel={20}
             style={StyleSheet.absoluteFillObject}
             provider={PROVIDER_GOOGLE}
             mapType="standard"
           >
             {item?.length == 0
               ? Venues?.map((marker) => (
-                  <MapView.Marker coordinate={marker.coordinates} />
-                ))
+                <MapView.Marker coordinate={marker.coordinates} title={marker.name} />
+              ))
               : item?.map((marker) => (
-                  <MapView.Marker coordinate={marker.coordinates} />
-                ))}
+                <MapView.Marker coordinate={marker.coordinates} title={marker.name} />
+              ))}
           </MapView>
         </View>
       </View>
