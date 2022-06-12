@@ -34,6 +34,7 @@ const Booking = ({ route }) => {
   const [selectedVenue, setVenue] = useState(undefined);
   const [selectedTeam, setTeam] = useState(undefined);
   const [teamList, setTeamList] = useState([]);
+  const [teamList2, setTeamList2] = useState([]);
   const [venueList, setVenueList] = useState([{}]);
   const [bookingList, setBookingList] = useState([]);
   const [selectedIndex, setselectedIndex] = useState(0);
@@ -87,8 +88,8 @@ const Booking = ({ route }) => {
       try {
         setLoader(true)
         // console.log("user--------------------",user)
-        const team = teamList.filter(item => item.TeamName == selectedTeam)
-        const getMyTeam = teamList.filter(item => item.uid == user.uid)
+        const team = teamList2.filter(item => item.TeamName == selectedTeam)
+        const getMyTeam = teamList2.filter(item => item.uid == user.uid)
         const myteam = getMyTeam[0].TeamName
         const uuid = getMyTeam[0]
         const uuid2 = team[0]
@@ -195,13 +196,17 @@ const Booking = ({ route }) => {
       getBasketballTeams(onTeamsReceived);
     } else if (selectedSport === "Cricket") {
       getCricketTeams(onTeamsReceived);
+      getCricketTeams(onTeamsReceived2);
     }
   }, [selectedSport]);
 
   const onTeamsReceived = (teamList) => {
     let index = teamList.findIndex(item => item.uid === user.uid);
-    teamList.splice(index,1)
+    teamList.splice(index, 1)
     setTeamList(teamList);
+  };
+  const onTeamsReceived2 = (teamList) => {
+    setTeamList2(teamList);
   };
   const onVenueReceived = (venueList) => {
     setVenueList(venueList);
