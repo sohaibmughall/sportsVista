@@ -11,7 +11,6 @@ const DrawerMenuDetail = (props) => {
 
   const auth = getAuth()
   const user = auth.currentUser
-  console.log(user.uid);
 
   return (
     <DrawerContentScrollView contentContainerStyle={styles.drawerContainer}>
