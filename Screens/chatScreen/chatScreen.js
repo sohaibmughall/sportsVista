@@ -1,3 +1,8 @@
+
+
+
+
+
 import {
     View,
     Text,
@@ -26,7 +31,9 @@ const ChatScreen = (props) => {
     const auth = getAuth();
     const user = auth.currentUser;
     const [chats, setchats] = useState([]);
-    const { Match_Against } = props?.route?.params?.route;
+
+
+    const { match_id, Match_Against_uuid, Match_Against } = props?.route?.params?.route;
 
 
     const obj = {
@@ -35,15 +42,43 @@ const ChatScreen = (props) => {
         uid: user.uid
     }
 
-    const handleSend = () => {
+    console.disableYellowBox = true;
+
+    useEffect(async () => {
+        setchats([])
+        // const getchats = ref.doc(match_id).get()
+        let chatitem = []
+        const unsubscribeListener = firebase.firestore().collection('Conversations').doc(match_id)
+            .onSnapshot((doc) => {
+                const firebaseData = doc.data()
+                const data = firebaseData ? firebaseData : null
+                console.log(data.messages);
+                setchats(firebaseData.messages)
+            })
+
+        return () => unsubscribeListener()
+
+    }, [])
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         setchats((oldArray) => oldArray.concat(obj))
-        setmessage("")
+        await firebase.firestore().collection('Conversations').doc(match_id).set({
+            members: {
+                sender: user.uid,
+                recever: Match_Against_uuid.uid,
+                matchid: match_id
+            },
+            messages: chats
+        })
+
+
         scrollRef.current?.scrollTo({
             y: 10000,
             animated: true
         });
-
     }
+
 
     return (
         <View style={styles.container}>
@@ -54,9 +89,9 @@ const ChatScreen = (props) => {
                         <View style={styles.chatcontainer}>
 
                             <View>
-                                {chats.map(chat => {
+                                {chats && chats.map(chat => {
                                     return (
-                                        <View style={styles.chatmessageLeft}>
+                                        <View style={user.uid === Match_Against_uuid.uid ? styles.chatmessageLeft : styles.chatmessageRight}>
                                             <Text key={chat.content} style={{ textAlign: "left", color: "white", marginBottom: 10 }}>{chat.content}</Text>
                                             <Text key={chat.timestamp} style={{ textAlign: "right", color: "white" }}>{chat.timestamp}</Text>
                                         </View>
@@ -69,7 +104,7 @@ const ChatScreen = (props) => {
                 <View style={styles.inputarea}>
                     <Input value={message} onChangeText={(e) => setmessage(e)} placeholder="Type Message"
                         leftIcon={{ type: 'font-awesome', name: 'comment' }} />
-                    <Button title={"send"} onPress={() => handleSend()} />
+                    <Button title={"send"} onPress={(event) => handleSubmit(event)} />
                 </View>
 
             </ImageBackground>
@@ -93,7 +128,16 @@ const styles = StyleSheet.create({
         alignItems: "flex-end"
     },
     chatmessageLeft: {
-        backgroundColor: "gray",
+        backgroundColor: "red",
+        margin: 10,
+        width: "70%",
+        padding: 14,
+        borderRadius: 8,
+        color: "white",
+    },
+    chatmessageRight: {
+        backgroundColor: "red",
+        alignSelf:"flex-start",
         margin: 10,
         width: "70%",
         padding: 14,

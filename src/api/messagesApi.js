@@ -2,15 +2,14 @@
 
 
 
-export const messageobj = (obj, userid, uidMastchAgainst) => {
+export const messageobj = (chats, userid, matchd , againts ) => {
     const message = {
         members: {
             sender: userid,
-            recever: uidMastchAgainst,
+            recever: againts,
+            matchid : matchd
         },
-        messages: []
+        messages: chats
     }
-    const msg = message.messages
-    const newTodos = [...msg, { obj }];
     return message
 }
