@@ -1,8 +1,4 @@
 
-
-
-
-
 import {
     View,
     Text,
@@ -24,36 +20,27 @@ import { getBookings } from "../../src/api/bookingApi";
 
 
 const ChatScreen = (props) => {
-    console.ignoredYellowBox = ["Warning: Each", "Warning: Failed"];
+
     const scrollRef = useRef(<ScrollView />);
     const [message, setmessage] = useState("");
 
     const auth = getAuth();
     const user = auth.currentUser;
     const [chats, setchats] = useState([]);
-
+    const [sender, setsender] = useState([]);
 
     const { match_id, Match_Against_uuid, Match_Against } = props?.route?.params?.route;
 
-
-    const obj = {
-        content: message,
-        timestamp: moment(Date.now()).format('h:mm:ss a'),
-        uid: user.uid
-    }
-
-    console.disableYellowBox = true;
-
     useEffect(async () => {
         setchats([])
-        // const getchats = ref.doc(match_id).get()
-        let chatitem = []
         const unsubscribeListener = firebase.firestore().collection('Conversations').doc(match_id)
             .onSnapshot((doc) => {
                 const firebaseData = doc.data()
-                const data = firebaseData ? firebaseData : null
-                console.log(data.messages);
-                setchats(firebaseData.messages)
+                setchats(firebaseData ? firebaseData.messages : [])
+                scrollRef.current?.scrollTo({
+                    y: 1000,
+                    animated: true
+                });
             })
 
         return () => unsubscribeListener()
@@ -61,22 +48,27 @@ const ChatScreen = (props) => {
     }, [])
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        setchats((oldArray) => oldArray.concat(obj))
-        await firebase.firestore().collection('Conversations').doc(match_id).set({
-            members: {
-                sender: user.uid,
-                recever: Match_Against_uuid.uid,
-                matchid: match_id
-            },
-            messages: chats
-        })
+        if (
+            message
+        ) {
+            scrollRef.current?.scrollTo({
+                y: 1000,
+                animated: true
+            });
+            const obj = {
+                content: message,
+                timestamp: moment(Date.now()).format('h:mm a'),
+                uid: user.uid
+            }
+            const newarray = [...chats]
+            newarray.push(obj)
+            event.preventDefault();
+            firebase.firestore().collection('Conversations').doc(match_id).set({
+                messages: newarray
+            })
+            setmessage("")
+        }
 
-
-        scrollRef.current?.scrollTo({
-            y: 10000,
-            animated: true
-        });
     }
 
 
@@ -85,15 +77,15 @@ const ChatScreen = (props) => {
             <ImageBackground resizeMode="cover" style={styles.image}>
                 <Text style={styles.heading}>{Match_Against}</Text>
                 <ScrollView ref={scrollRef}>
-                    <KeyboardAvoidingView>
+                    <KeyboardAvoidingView >
                         <View style={styles.chatcontainer}>
 
                             <View>
                                 {chats && chats.map(chat => {
                                     return (
-                                        <View style={user.uid === Match_Against_uuid.uid ? styles.chatmessageLeft : styles.chatmessageRight}>
+                                        <View style={user.uid === chat.uid ? styles.chatmessageLeft : styles.chatmessageRight}>
                                             <Text key={chat.content} style={{ textAlign: "left", color: "white", marginBottom: 10 }}>{chat.content}</Text>
-                                            <Text key={chat.timestamp} style={{ textAlign: "right", color: "white" }}>{chat.timestamp}</Text>
+                                            <Text key={chat.timestamp} style={{ textAlign: "right", color: "white", fontSize: 10 }}>{chat.timestamp}</Text>
                                         </View>
                                     )
                                 })}
@@ -128,21 +120,21 @@ const styles = StyleSheet.create({
         alignItems: "flex-end"
     },
     chatmessageLeft: {
-        backgroundColor: "red",
-        margin: 10,
+        backgroundColor: "black",
         width: "70%",
         padding: 14,
         borderRadius: 8,
         color: "white",
+        marginTop: 10
     },
     chatmessageRight: {
-        backgroundColor: "red",
-        alignSelf:"flex-start",
-        margin: 10,
+        backgroundColor: "#1E6738",
+        alignSelf: "flex-end",
         width: "70%",
-        padding: 14,
+        padding: 10,
         borderRadius: 8,
         color: "white",
+        marginTop: 10
     },
 
     chatcontainer: {

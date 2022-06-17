@@ -14,6 +14,7 @@ import { Avatar, Card, Title, Paragraph } from 'react-native-paper';
 import moment from "moment";
 import { Button, LinearProgress } from 'react-native-elements'
 import { getBookings } from "../../src/api/bookingApi";
+import { getCricketTeams } from "../../src/api/teamsApi";
 
 
 
@@ -23,15 +24,20 @@ const myBooking = (props) => {
     const auth = getAuth();
     const user = auth.currentUser;
     const [myBooking, setmyBooking] = useState([]);
+    const [teamList2, setTeamList2] = useState([]);
 
     useEffect(() => {
+
         const onBookingRetrive = async (bookings) => {
-            const data = await bookings.filter(item => item.Match_creater_uuid.uid == user.uid)
+            const getMyTeam = teamList2.filter(item => item.uid == user.uid)
+            const data = await bookings.filter(item => item.Match_Against_uuid.uid == user.uid || item.Match_creater_uuid.uid == user.uid)
             setmyBooking(data);
         };
-        getBookings(onBookingRetrive)
-    }, [])
 
+        getBookings(onBookingRetrive)
+
+        return () => onBookingRetrive()
+    }, [])
 
     const image = require("../../assets/backgroundone.jpg");
     return (
