@@ -26,7 +26,7 @@ import MatchNotificationComponent from '../../components/Notification/MatchNotif
 
 
 
-const Booking = ({ route }) => {
+const Booking = ({ route, props }) => {
   const { params } = route ? route : {}
   const { notification } = params ? params : {}
   const [match_notification, set_match_notification] = useState(null);

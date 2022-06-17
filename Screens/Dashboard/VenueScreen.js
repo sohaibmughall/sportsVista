@@ -124,10 +124,10 @@ const VenueScreen = (props) => {
           >
             {item?.length == 0
               ? Venues?.map((marker) => (
-                <MapView.Marker coordinate={marker.coordinates} title={marker.name} />
+                <MapView.Marker coordinate={marker.coordinates} title={marker.name} showsUserLocation={true} />
               ))
               : item?.map((marker) => (
-                <MapView.Marker coordinate={marker.coordinates} title={marker.name} />
+                <MapView.Marker coordinate={marker.coordinates} title={marker.name} showsUserLocation={true}  />
               ))}
           </MapView>
         </View>
