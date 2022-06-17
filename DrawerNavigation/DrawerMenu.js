@@ -92,7 +92,7 @@ const DrawerMenuDetail = (props) => {
             />
             <Text style={styles.drawerTextStyle}>My Bookings</Text>
           </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               props.navigation.navigate("myChats");
             }}
@@ -105,7 +105,7 @@ const DrawerMenuDetail = (props) => {
             />
 
             <Text style={styles.drawerTextStyle}>My Chats</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
       <View style={styles.logoutContainer}>
